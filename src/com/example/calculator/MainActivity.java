@@ -76,6 +76,24 @@ public class MainActivity extends Activity {
 		setCurrentString("0");
 		previousString = null;
     }
+    public void calculate(int id) {
+		double curr = Double.parseDouble(getCurrentString());
+		double result = curr;
+		if (previousString != null) {
+			double prev = Double.parseDouble(previousString);
+			switch(currentOpperand) {
+				case R.id.buttonPlus: result = prev + curr; break;
+				case R.id.buttonMinus: result = prev - curr; break;
+				case R.id.buttonTimes: result = prev * curr; break;
+				case R.id.buttonDivide: result = prev / curr; break;
+				default: break;
+			}
+		}
+		currentOpperand = id;
+		previousString = ""+result;
+		setCurrentString(previousString);
+		isTempStringShown = true;
+    }
     
     private class NumberButtonClickListener implements OnClickListener {
     	@Override
@@ -97,27 +115,11 @@ public class MainActivity extends Activity {
     		if (id == R.id.buttonClear) {
     			clear();
     		}else if (id == R.id.buttonEquals) {
-//    			isTempStringShown = true;
-    			//do stuff
+    			calculate(currentOpperand);
     		}else if (id == R.id.buttonDecimal) {
     			//do stuff
     		}else {
-    			double curr = Double.parseDouble(getCurrentString());
-    			double result = curr;
-    			if (previousString != null) {
-        			double prev = Double.parseDouble(previousString);
-        			switch(currentOpperand) {
-        				case R.id.buttonPlus: result = prev + curr; break;
-        				case R.id.buttonMinus: result = prev - curr; break;
-        				case R.id.buttonTimes: result = prev * curr; break;
-        				case R.id.buttonDivide: result = prev / curr; break;
-        				default: break;
-        			}
-        		}
-    			currentOpperand = id;
-    			previousString = ""+result;
-    			setCurrentString(previousString);
-    			isTempStringShown = true;
+    			calculate(id);
     		}
     			
     	}
