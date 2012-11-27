@@ -117,7 +117,13 @@ public class MainActivity extends Activity {
     		}else if (id == R.id.buttonEquals) {
     			calculate(currentOpperand);
     		}else if (id == R.id.buttonDecimal) {
-    			//do stuff
+    			if (!getCurrentString().contains(".")) {
+    				if (isTempStringShown) {
+    					isTempStringShown = false;
+    					setCurrentString("0");
+    				}
+    				setCurrentString(getCurrentString()+".");
+    			}
     		}else {
     			calculate(id);
     		}
