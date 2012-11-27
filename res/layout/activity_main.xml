@@ -14,9 +14,6 @@
     />
     
     <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
-        <Button android:layout_height="wrap_content" android:id="@+id/buttonLeftParen" android:text="(" android:layout_weight="1" android:layout_width="match_parent"></Button>
-        <Button android:layout_height="wrap_content" android:id="@+id/buttonRightParen" android:text=")" android:layout_weight="1" android:layout_width="match_parent"></Button>
-        <Button android:layout_height="wrap_content" android:id="@+id/buttonBackspace" android:layout_weight="1" android:text="B" android:layout_width="match_parent"></Button>
         <Button android:layout_height="wrap_content" android:id="@+id/buttonClear" android:text="C" android:layout_weight="1" android:layout_width="match_parent"></Button>
     </LinearLayout>
     <LinearLayout android:id="@+id/linearLayout2" android:layout_width="match_parent" android:layout_height="wrap_content">

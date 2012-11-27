@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private String mathString;
+	private String currentString = "0";
+	private String previousString = null;
+	private boolean isTempStringShown;
 	private TextView textView;
+	private int currentOpperand = 0;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +32,28 @@ public class MainActivity extends Activity {
         textView = (TextView) findViewById(R.id.textView);
         
         // Set the listener for all the buttons
-        ButtonClickListener clickListener = new ButtonClickListener();
-        int idList[] = { R.id.button0, R.id.button1, R.id.button2,
+        int numberButtons[] = { R.id.button0, R.id.button1, R.id.button2,
           R.id.button3, R.id.button4, R.id.button5, R.id.button6,
-          R.id.button7, R.id.button8, R.id.button9, R.id.buttonLeftParen,
-          R.id.buttonRightParen, R.id.buttonPlus, R.id.buttonPlus,
-          R.id.buttonMinus, R.id.buttonDivide, R.id.buttonTimes,
-          R.id.buttonDecimal, R.id.buttonBackspace, R.id.buttonClear };
+          R.id.button7, R.id.button8, R.id.button9
+        };
+        int opperandButtons[] = {
+        		R.id.buttonPlus, R.id.buttonMinus, R.id.buttonDivide, R.id.buttonTimes,
+                R.id.buttonDecimal, R.id.buttonClear, R.id.buttonEquals
+        };
 
-        for(int id : idList) {
+        NumberButtonClickListener numberClickListener = new NumberButtonClickListener();
+        for(int id : numberButtons) {
          View v = findViewById(id);
-         v.setOnClickListener(clickListener);
+         v.setOnClickListener(numberClickListener);
         }
         
-        setMathString("0");
+        OpperandButtonClickListener oppClickListener = new OpperandButtonClickListener();
+        for(int id : opperandButtons) {
+         View v = findViewById(id);
+         v.setOnClickListener(oppClickListener);
+        }
+        
+        setCurrentString("0");
     }
 
     @Override
@@ -52,28 +63,63 @@ public class MainActivity extends Activity {
         return true;
     }
     
-    public void setMathString(String s) {
-    	mathString = s;
+    public void setCurrentString(String s) {
+    	currentString = s;
     	textView.setText(s);
     }
+    public String getCurrentString() {
+    	return currentString;
+    }
     
-    private class ButtonClickListener implements OnClickListener {
+    public void clear() {
+		isTempStringShown = false;
+		setCurrentString("0");
+		previousString = null;
+    }
+    
+    private class NumberButtonClickListener implements OnClickListener {
     	@Override
-    	public void onClick(View v) 
-    	{
-    	 switch (v.getId()) {
-    	 case R.id.buttonBackspace:
-    	  if(mathString.length() > 0)
-//    		  delete stuff here
-    	  break;
-    	 case R.id.buttonClear:
-    	  if(mathString.length() > 0)
-    		  setMathString("0");
-    	  break;
-    	 default:
-    		 setMathString(mathString+(((Button)v).getText()));
-    	 }
-    	 
+    	public void onClick(View v)  {
+    		String text = (String) ((Button)v).getText();    		
+    		if (currentString.equals("0") || isTempStringShown) {
+    			isTempStringShown = false;
+    			setCurrentString(text);
+    		}else {
+    			setCurrentString(getCurrentString()+text);
+    		}
+    	}
+    }
+    
+    private class OpperandButtonClickListener implements OnClickListener {
+    	@Override
+    	public void onClick(View v)  {
+    		int id = v.getId();
+    		if (id == R.id.buttonClear) {
+    			clear();
+    		}else if (id == R.id.buttonEquals) {
+//    			isTempStringShown = true;
+    			//do stuff
+    		}else if (id == R.id.buttonDecimal) {
+    			//do stuff
+    		}else {
+    			double curr = Double.parseDouble(getCurrentString());
+    			double result = curr;
+    			if (previousString != null) {
+        			double prev = Double.parseDouble(previousString);
+        			switch(currentOpperand) {
+        				case R.id.buttonPlus: result = prev + curr; break;
+        				case R.id.buttonMinus: result = prev - curr; break;
+        				case R.id.buttonTimes: result = prev * curr; break;
+        				case R.id.buttonDivide: result = prev / curr; break;
+        				default: break;
+        			}
+        		}
+    			currentOpperand = id;
+    			previousString = ""+result;
+    			setCurrentString(previousString);
+    			isTempStringShown = true;
+    		}
+    			
     	}
     }
     
